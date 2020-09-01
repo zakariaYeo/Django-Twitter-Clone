@@ -11,9 +11,9 @@ Demo Image:
 
 2. Move to the base directory: ```cd Django-Twitter-Clone```
 
-3. Create a new python environment with: ```python -m venv env```.
+3. Create a new python environment with: ```python -m venv venv```.
 
-4. Activate environment with: ```env\Scripts\activate``` on windows, or ```source env/bin/activate``` on Mac and Linux.
+4. Activate environment with: ```venv\Scripts\activate``` on windows, or ```source venv/bin/activate``` on Mac and Linux.
 
 5. Install required dependencies with: ```pip install -r requirements.txt```.
 
