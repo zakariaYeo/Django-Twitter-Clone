@@ -3,7 +3,7 @@
 {% block content %}
     <div class="row">
         <div class="col-12 col-md-3 pr-4 dont-move">
-            <a href="/"> <h2><img class="img-fluid" width="60" src="{% static 'blog/logo.png' %}">Twitter Clone</h2></a><br>
+            <a href="/"> <h2><img class="img-fluid" width="60" src="{% static 'blog/logo.png' %}"></h2></a><br>
             <div class="profile-section">
             <h3 class="white-important p-2">
                 Profile
@@ -82,7 +82,7 @@
                 {% if user_profile is None %}
                 <div style="margin-left: 40px">
                     <a class="btn btn-sm btn-outline-primary mb-4 mr-3 " href="{% url 'post-create' %}">
-                        Tweet
+                        Tweeter
                     </a>
                 </div>
                 {% endif %}
@@ -109,15 +109,12 @@
             <div class="full-width row">
                 <div class="col-6">
                     <h3 class="white-important mb-3">
-                        Tweets
+                        Home
                     </h3>
                 </div>
                  <div class="col-6 no-padding">
-                    <h6
-                            style="position: absolute; bottom: 0; right: 0"
-                            class="white-important mb-3">
-                        {{ page_obj.start_index }} - {{ page_obj.end_index }} of
-                        {{ paginator.count }}
+                    <h6 style="position: absolute; bottom: 0; right: 0" class="white-important mb-3">
+                        {{ page_obj.start_index }} - {{ page_obj.end_index }} of {{ paginator.count }}
                     </h6>
                 </div>
             </div>
@@ -125,15 +122,9 @@
             {% for post in posts %}
                 <article class="media content-section hovered-tweet">
                 <div style="width: 100%; word-break: break-all;">
-                    
                     <div class="pb-2 row m-0" style="width: 100%; margin-right: 0 !important;">
-                       <div
-                               style="padding-left: 0px !important;"
-                               class="col-8 no-padding d-flex align-items-center">
-                           <img
-                               class="rounded-circle mr-2"
-                               style="width: 20px; height: 20px;"
-                               src="{{ post.author.profile.image.url }}">
+                       <div style="padding-left: 0px !important;" class="col-8 no-padding d-flex align-items-center">
+                           <img class="rounded-circle mr-2" style="width: 20px; height: 20px;" src="{{ post.author.profile.image.url }}">
                            <a class="mr-2 white-important" href="{% url 'user-posts' post.author %}">
                                {{ post.author }}
                            </a>
@@ -150,21 +141,15 @@
                             {%  endif %}
                        </div>
                    </div>
-                    <div
-                            class="mb-2"
-                            style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.1)"></div>
-                    <a
-                            style="color: rgba(255, 255, 255, 0.5) !important;"
-                            href="{% url 'post-detail' post.id %}">
+                    <div class="mb-2" style="width: 100%; height: 1px; background-color: rgba(255, 255, 255, 0.1)"></div>
+                    <a style="color: rgba(255, 255, 255, 0.5) !important;" href="{% url 'post-detail' post.id %}">
                         <p class="mb-4">
                             {{ post.content }}
                         </p>
                     </a>
-
                         <div class="row">
                             <div class="col-6" style="display: flex;">
                                 <small style="opacity: 0.4;">
-
                                     <!-- Like Buttons Here -->
                                     <a href="#" onClick="document.getElementById('likebutton').submit()">
                                             {% if post.likes == 1  %}
@@ -172,34 +157,26 @@
                                             {% else %}
                                             <i style=" font-size: 16px;" class="far fa-heart"></i>
                                             {% endif %}
-
                                              {{post.likes}} like(s)
-                                        
-                                    </a> 
-
+                                    </a>
                                     <form id="likebutton" method="POST" action="{% url 'postpreference' post.id 1%}">
                                     {% csrf_token %}
                                     <input type="hidden">
                                     </form>
-
-                                    
                                 </small>
                                 <small style="opacity: 0.4; margin-left:15px;">
                                     <a href="/post/{{post.id}}/">
-                                        <i style=" font-size: 16px;" class="far fa-comment"></i> {{ post.number_of_comments }} comment(s)
+                                        <i style=" font-size: 16px;" class="far fa-comment"></i>
+                                            {{ post.number_of_comments }} comment(s)
                                     </a>
-                                    
                                 </small>
                             </div>
                             <div class="col-6">
-                                <small
-                                        style="opacity: 0.4;"
-                                    class="white-important d-flex full-width flex-row-reverse">
+                                <small style="opacity: 0.4;" class="white-important d-flex full-width flex-row-reverse">
                                     {{ post.date_posted | date:"H:i l, d.m.y" }}
                                 </small>
                             </div>
                         </div>
-                    
                 </div>
                 </article>
             {% endfor %}
@@ -255,13 +232,8 @@
                             {% for user in all_users %}
                                 <li>
                                     <div class="who-to-follow">
-                                    
-                                        <div
-                                               style="padding-left: 0px !important;"
-                                               class="col-8 no-padding d-flex align-items-center">
-                                           <img
-                                               class="rounded-circle mr-2"
-                                               style="width: 20px; height: 20px;"
+                                        <div style="padding-left: 0px !important;" class="col-8 no-padding d-flex align-items-center">
+                                           <img class="rounded-circle mr-2" style="width: 20px; height: 20px;"
                                                src="{{ user.profile.image.url }}">
                                            <a class="mr-2 white-important" href="{% url 'user-posts' user.username %}">
                                                {{ user.username }}

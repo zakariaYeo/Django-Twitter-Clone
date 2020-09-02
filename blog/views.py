@@ -28,18 +28,13 @@ class PostListView(LoginRequiredMixin, ListView):
         data = super().get_context_data(**kwargs)
 
         all_users = []
-        data_counter = Post.objects.values('author')\
-            .annotate(author_count=Count('author'))\
-            .order_by('-author_count')[:6]
+        data_counter = Post.objects.values('author').annotate(author_count=Count('author')).order_by('-author_count')[
+                       :6]
 
         for aux in data_counter:
             all_users.append(User.objects.filter(pk=aux['author']).first())
-        # if Preference.objects.get(user = self.request.user):
-        #     data['preference'] = True
-        # else:
-        #     data['preference'] = False
+
         data['preference'] = Preference.objects.all()
-        # print(Preference.objects.get(user= self.request.user))
         data['all_users'] = all_users
         print(all_users, file=sys.stderr)
         return data
@@ -84,17 +79,15 @@ class UserPostListView(LoginRequiredMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         if request.user.id is not None:
-            follows_between = Follow.objects.filter(user=request.user,
-                                                    follow_user=self.visible_user())
+            follows_between = Follow.objects.filter(user=request.user, follow_user=self.visible_user())
 
             if 'follow' in request.POST:
-                    new_relation = Follow(user=request.user, follow_user=self.visible_user())
-                    if follows_between.count() == 0:
-                        new_relation.save()
+                new_relation = Follow(user=request.user, follow_user=self.visible_user())
+                if follows_between.count() == 0:
+                    new_relation.save()
             elif 'unfollow' in request.POST:
-                    if follows_between.count() > 0:
-                        follows_between.delete()
-
+                if follows_between.count() > 0:
+                    follows_between.delete()
         return self.get(self, request, *args, **kwargs)
 
 
@@ -111,11 +104,8 @@ class PostDetailView(DetailView):
         return data
 
     def post(self, request, *args, **kwargs):
-        new_comment = Comment(content=request.POST.get('content'),
-                              author=self.request.user,
-                              post_connected=self.get_object())
+        new_comment = Comment(content=request.POST.get('content'), author=self.request.user, post_connected=self.get_object())
         new_comment.save()
-
         return self.get(self, request, *args, **kwargs)
 
 
@@ -203,64 +193,66 @@ class FollowersListView(ListView):
 # Like Functionality====================================================================================
 @login_required
 def postpreference(request, postid, userpreference):
-        if request.method == "POST":
-                eachpost= get_object_or_404(Post, id=postid)
-                obj=''
-                valueobj=''
-                try:
-                        obj= Preference.objects.get(user= request.user, post= eachpost)
-                        valueobj= obj.value 
-                        valueobj= int(valueobj)
-                        userpreference= int(userpreference)
-                        if valueobj != userpreference:
-                                obj.delete()
-                                upref= Preference()
-                                upref.user= request.user
-                                upref.post= eachpost
-                                upref.value= userpreference
-                                if userpreference == 1 and valueobj != 1:
-                                        eachpost.likes += 1
-                                        eachpost.dislikes -=1
-                                elif userpreference == 2 and valueobj != 2:
-                                        eachpost.dislikes += 1
-                                        eachpost.likes -= 1
-                                upref.save()
-                                eachpost.save()
-                                context= {'eachpost': eachpost,
-                                  'postid': postid}
-                                return redirect('blog-home')
-                        elif valueobj == userpreference:
-                                obj.delete()
-                                if userpreference == 1:
-                                        eachpost.likes -= 1
-                                elif userpreference == 2:
-                                        eachpost.dislikes -= 1
-                                eachpost.save()
-                                context= {'eachpost': eachpost,
-                                  'postid': postid}
-                                return redirect('blog-home')
-                                
-                except Preference.DoesNotExist:
-                        upref= Preference()
-                        upref.user= request.user
-                        upref.post= eachpost
-                        upref.value= userpreference
-                        userpreference= int(userpreference)
-                        if userpreference == 1:
-                                eachpost.likes += 1
-                        elif userpreference == 2:
-                                eachpost.dislikes +=1
-                        upref.save()
-                        eachpost.save()                            
-
-                        context= {'post': eachpost,
-                          'postid': postid}
-
-                        return redirect('blog-home')
-
-        else:
-                eachpost= get_object_or_404(Post, id=postid)
-                context= {'eachpost': eachpost,
-                          'postid': postid}
-
+    if request.method == "POST":
+        eachpost = get_object_or_404(Post, id=postid)
+        obj = ''
+        valueobj = ''
+        try:
+            obj = Preference.objects.get(user=request.user, post=eachpost)
+            valueobj = obj.value
+            valueobj = int(valueobj)
+            userpreference = int(userpreference)
+            if valueobj != userpreference:
+                obj.delete()
+                upref = Preference()
+                upref.user = request.user
+                upref.post = eachpost
+                upref.value = userpreference
+                if userpreference == 1 and valueobj != 1:
+                    eachpost.likes += 1
+                    eachpost.dislikes -= 1
+                elif userpreference == 2 and valueobj != 2:
+                    eachpost.dislikes += 1
+                    eachpost.likes -= 1
+                upref.save()
+                eachpost.save()
+                context = {'eachpost': eachpost,
+                           'postid': postid}
                 return redirect('blog-home')
+            elif valueobj == userpreference:
+                obj.delete()
+                if userpreference == 1:
+                    eachpost.likes -= 1
+                elif userpreference == 2:
+                    eachpost.dislikes -= 1
+                eachpost.save()
+                context = {'eachpost': eachpost,
+                           'postid': postid}
+                return redirect('blog-home')
+
+        except Preference.DoesNotExist:
+            upref = Preference()
+            upref.user = request.user
+            upref.post = eachpost
+            upref.value = userpreference
+            userpreference = int(userpreference)
+            if userpreference == 1:
+                eachpost.likes += 1
+            elif userpreference == 2:
+                eachpost.dislikes += 1
+            upref.save()
+            eachpost.save()
+
+            context = {'post': eachpost,
+                       'postid': postid
+                       }
+
+            return redirect('blog-home')
+
+    else:
+        eachpost = get_object_or_404(Post, id=postid)
+        context = {'eachpost': eachpost,
+                   'postid': postid
+                   }
+
+        return redirect('blog-home')
