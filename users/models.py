@@ -18,8 +18,7 @@ class Profile(models.Model):
     def following(self):
         return Follow.objects.filter(user=self.user).count()
 
-    def save(self, force_insert=False, force_update=False, using=None,
-             update_fields=None):
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
         super().save()
 
         img = Image.open(self.image.path)
