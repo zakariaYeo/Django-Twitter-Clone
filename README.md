@@ -1,9 +1,9 @@
-# Django Twitter Clone by Zakaria Yeo
+# Django Twitter Clone
 
 Fully functional Django App that looks exactly like real Twitter.
 
 Demo Image:
-![](TwitterDemo.png)
+![](cloneTwitter.jpg)
 
 ## Setup
 
