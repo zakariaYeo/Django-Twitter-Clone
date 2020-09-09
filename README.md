@@ -3,7 +3,7 @@
 Fully functional Django App that looks exactly like real Twitter.
 
 Demo Image:
-![](cloneTwitter.jpg)
+![](cloneTwitter.JPG)
 
 ## Setup
 
